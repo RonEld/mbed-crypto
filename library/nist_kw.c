@@ -640,7 +640,14 @@ int mbedtls_nist_kw_self_test( int verbose )
 
         ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES,
                                       kw_key[i], key_len[i] * 8, 1 );
-        if( ret != 0 )
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 )
         {
             if( verbose != 0 )
                 mbedtls_printf( "  KW: setup failed " );
@@ -650,7 +657,14 @@ int mbedtls_nist_kw_self_test( int verbose )
 
         ret = mbedtls_nist_kw_wrap( &ctx, MBEDTLS_KW_MODE_KW, kw_msg[i],
                                     kw_msg_len[i], out, &olen, sizeof( out ) );
-        if( ret != 0 || kw_out_len[i] != olen ||
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 || kw_out_len[i] != olen ||
             memcmp( out, kw_res[i], kw_out_len[i] ) != 0 )
         {
             if( verbose != 0 )
@@ -660,9 +674,16 @@ int mbedtls_nist_kw_self_test( int verbose )
             goto end;
         }
 
-        if( ( ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES,
-                                            kw_key[i], key_len[i] * 8, 0 ) )
-              != 0 )
+        ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES,
+                                      kw_key[i], key_len[i] * 8, 0 );
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 )
         {
             if( verbose != 0 )
                 mbedtls_printf( "  KW: setup failed ");
@@ -672,8 +693,14 @@ int mbedtls_nist_kw_self_test( int verbose )
 
         ret = mbedtls_nist_kw_unwrap( &ctx, MBEDTLS_KW_MODE_KW,
                                       out, olen, out, &olen, sizeof( out ) );
-
-        if( ret != 0 || olen != kw_msg_len[i] ||
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 || olen != kw_msg_len[i] ||
             memcmp( out, kw_msg[i], kw_msg_len[i] ) != 0 )
         {
             if( verbose != 0 )
@@ -695,7 +722,14 @@ int mbedtls_nist_kw_self_test( int verbose )
 
         ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES, kwp_key[i],
                                       key_len[i] * 8, 1 );
-        if( ret  != 0 )
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret  != 0 )
         {
             if( verbose != 0 )
                 mbedtls_printf( "  KWP: setup failed " );
@@ -704,8 +738,14 @@ int mbedtls_nist_kw_self_test( int verbose )
         }
         ret = mbedtls_nist_kw_wrap( &ctx, MBEDTLS_KW_MODE_KWP, kwp_msg[i],
                                     kwp_msg_len[i], out, &olen, sizeof( out ) );
-
-        if( ret != 0 || kwp_out_len[i] != olen ||
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 || kwp_out_len[i] != olen ||
             memcmp( out, kwp_res[i], kwp_out_len[i] ) != 0 )
         {
             if( verbose != 0 )
@@ -715,9 +755,16 @@ int mbedtls_nist_kw_self_test( int verbose )
             goto end;
         }
 
-        if( ( ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES,
-                                            kwp_key[i], key_len[i] * 8, 0 ) )
-              != 0 )
+        ret = mbedtls_nist_kw_setkey( &ctx, MBEDTLS_CIPHER_ID_AES,
+                                      kwp_key[i], key_len[i] * 8, 0 );
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 )
         {
             if( verbose != 0 )
                 mbedtls_printf( "  KWP: setup failed ");
@@ -727,8 +774,14 @@ int mbedtls_nist_kw_self_test( int verbose )
 
         ret = mbedtls_nist_kw_unwrap(  &ctx, MBEDTLS_KW_MODE_KWP, out,
                                        olen, out, &olen, sizeof( out ) );
-
-        if( ret != 0 || olen != kwp_msg_len[i] ||
+        if( ret == MBEDTLS_ERR_PLATFORM_FEATURE_UNSUPPORTED )
+        {
+            if( verbose != 0 )
+                mbedtls_printf( "skipped\n" );
+            ret = 0;
+            continue;
+        }
+        else if( ret != 0 || olen != kwp_msg_len[i] ||
             memcmp( out, kwp_msg[i], kwp_msg_len[i] ) != 0 )
         {
             if( verbose != 0 )
